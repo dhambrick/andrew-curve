@@ -30,11 +30,26 @@ def haarWavelet(m,n,t):
 
 class AndrewCurve:
     def __init__(self):
-        self.basisMap = {"fourier":self.fourier ,"legendre":self.legendre }
+        self.basisMap = {"fourier":self.fourier ,"legendre":self.legendre , "haar":self.haar }
 
     def genAndrewCurve(self,basis,data):
         #Todo : add logic to check for an unsupported basis type in the map
         return self.basisMap[basis](data)
+
+    def haar(self,data):
+        t = np.linspace(-10,10,100)
+        print(t.shape)
+        data = np.asarray(data)
+        M,N = data.shape
+        print(M,N)
+        legendreVec = []
+        for n in range(N):
+            legendreVec.append(spec.eval_legendre(n,t))
+        legendreVec = np.asarray(legendreVec)
+        andrewProj = np.dot(data,legendreVec)
+        print(andrewProj.shape)
+        return {"t":t, "data":andrewProj}
+
 
     def legendre(self,data):
         t = np.linspace(-10,10,100)
@@ -78,7 +93,7 @@ N = 5
 M = 5
 iris = datasets.load_iris()
 andrewCurve = AndrewCurve()
-leg = andrewCurve.genAndrewCurve("legendre" , iris.data)
+leg      = andrewCurve.genAndrewCurve("legendre" , iris.data)
 fourier1 = andrewCurve.genAndrewCurve("fourier", iris.data[:20,:])
 fourier2 = andrewCurve.genAndrewCurve("fourier", iris.data[50:70,:])
 fourier3 = andrewCurve.genAndrewCurve("fourier", iris.data[100:120,:])
