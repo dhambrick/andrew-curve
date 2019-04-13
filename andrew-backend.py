@@ -4,15 +4,40 @@ import scipy.special as spec
 import matplotlib.pyplot as plt
 from sklearn import datasets
 
+
+def haarMotherWavelet(t):
+    haar = []
+    for i in t:
+        if i < 0 :
+            haar.append(0) 
+        elif (0 <= i ) & (i<.5):
+            haar.append(1) 
+        elif (0.5 <= i ) & (i<1):
+            haar.append(-1) 
+        else :
+            haar.append(0) 
+    return haar        
+            
+def haarWavelet(m,n,t):
+    t = np.asarray(t)
+    k = 2**(-m)
+    k_2 = 2**(-m/2)
+    mnPsi = k_2 * np.asarray(haarMotherWavelet(k*t-n))
+    return mnPsi
+        
+    
+
+
 class AndrewCurve:
     def __init__(self):
         self.basisMap = {"fourier":self.fourier ,"legendre":self.legendre }
 
     def genAndrewCurve(self,basis,data):
+        #Todo : add logic to check for an unsupported basis type in the map
         return self.basisMap[basis](data)
 
     def legendre(self,data):
-        t = np.linspace(-1,1,100)
+        t = np.linspace(-10,10,100)
         print(t.shape)
         data = np.asarray(data)
         M,N = data.shape
@@ -46,9 +71,10 @@ class AndrewCurve:
         andrewProj = np.dot(data,fourierVec)
         print(andrewProj.shape)
         return {"t":t, "data":andrewProj}
+    
+   
 
-
-N = 50
+N = 5
 M = 5
 iris = datasets.load_iris()
 andrewCurve = AndrewCurve()
@@ -58,10 +84,16 @@ fourier2 = andrewCurve.genAndrewCurve("fourier", iris.data[50:70,:])
 fourier3 = andrewCurve.genAndrewCurve("fourier", iris.data[100:120,:])
 
 plt.figure()
-for proj in fourier1["data"]:
-    plt.plot(fourier1["t"],proj , 'r')
-for proj in fourier2["data"]:
-    plt.plot(fourier2["t"],proj , 'b')
-for proj in fourier3["data"]:
-    plt.plot(fourier3["t"],proj , 'g')
+
+t = np.linspace(-10,12,100)
+
+
+# for proj in fourier1["data"]:
+#     plt.plot(fourier1["t"],proj , 'r')
+# for proj in fourier2["data"]:
+#     plt.plot(fourier2["t"],proj , 'b')
+# for proj in fourier3["data"]:
+#     plt.plot(fourier3["t"],proj , 'g')
+for m in range(M):
+    plt.plot(t,haarWavelet(m,0,t))
 plt.show()
