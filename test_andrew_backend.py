@@ -5,8 +5,9 @@ def test_fourier():
     andrew_curve = AndrewCurve()
     
     data = np.asarray(list(range(1,6)))
-    t = np.linspace(-np.pi,np.pi,100)
+    t1 = np.linspace(-np.pi,np.pi,100)
     
-    fourier1 = data[0] * (1.0/np.sqrt(2)) + data[1]*np.sin(t) + data[2] * np.cos(t) + data[3]*np.sin(2*t) + data[4]*np.cos(2*t)
-    fourier2 = andrew_curve.genAndrewCurve("fourier", data)
+    fourier1 = data[0] * (1.0/np.sqrt(2)) + data[1]*np.sin(t1) + data[2] * np.cos(t1) + data[3]*np.sin(2*t1) + data[4]*np.cos(2*t1)
+    t2,fourier2 = andrew_curve.genAndrewCurve("fourier", data)
+    assert t1 == t2
     assert fourier1 == fourier2
