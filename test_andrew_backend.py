@@ -7,6 +7,6 @@ def test_fourier():
     data = np.asarray(list(range(1,6)))
     t = np.linspace(-np.pi,np.pi,100)
     
-    fourier1 = data[0] * (1.0/np.sqrt(2)) + data[1]*np.sin(t) + data[2] * cos(t) + data[3]*sin(2*t) + data[4]*cos(2*t)
+    fourier1 = data[0] * (1.0/np.sqrt(2)) + data[1]*np.sin(t) + data[2] * np.cos(t) + data[3]*np.sin(2*t) + data[4]*np.cos(2*t)
     fourier2 = andrewCurve.genAndrewCurve("fourier", data)
     assert fourier1 == fourier2
